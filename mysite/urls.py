@@ -21,8 +21,9 @@ from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns  
 from home.views import * 
 
-urlpatterns = [
-    path('admin/', admin.site.urls), 
+urlpatterns = [ 
+    path('admin/', admin.site.urls),  
+    path('',home),
     path('handle/', HandleFileUpload.as_view())
 ]  
 

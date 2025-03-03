@@ -4,10 +4,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response  
 from .serializers import *  
 from django.utils.decorators import method_decorator 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt 
+from rest_framework.parsers import MultiPartParser
 
 def home(request): 
-    return render(request, 'home.html' )
+    return render(request, 'home.html' ) 
+
+def download(request,uid): 
+    return render(request, 'download.html',context={'uid':uid})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class HandleFileUpload(APIView): 

@@ -103,41 +103,60 @@
     <input type="file" class="my-pond mt-4" multiple name="filepond" />
 
     <div class="text-center">
-        <button class="btn btn-success">Upload File</button>
+        <button class="btn btn-success" onclick ="upload_file()">Upload File</button>
     </div>
 
     <div class="carad mt-3">
         <div class="card-bodqy">
             <div class="background">
                 <center>
-                    <button class="clipboard">Click me to copy current Url</button>
+                    <button onclick="copyClip()" class="clipboard">Click me to copy current Url</button>
                     <p>Have you already clicked?</p>
                 </center>
             </div>
-
         </div>
     </div>
     </div>
-
 
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>  
 
     <script> 
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
-
         );
 
         const pond = FilePond.create(
             document.querySelector('.my-pond')
-        );
+        );  
+
+        var url = null;
+
+        function upload_file(){ 
+            var files = pond.getFiles();  
+            var formData = new FormData;  
+
+            for(var i=0; i<files.length; i++){ 
+                formData.append('files', files[i].file)
+            } 
+
+            fetch('/handle/',{ 
+                method : 'POST', 
+                headers : {'x-CSRFToken' :"{{ csrf_token }}"}, 
+                body : formData,
+            }).then(res => res.json()) 
+            .then(result => { 
+                console.log(result); 
+
+                url = `http://127.0.0.1:8000/download/${result.data.folder}`;
+            })
+        }  
+
+        function copyClip(){ 
+            navigator.clipboard.writeText(url); 
+            alert('Copied the text:' + url)
+        }
 
     </script>
-
-
-
-
-
 
 </body>
 
